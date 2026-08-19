@@ -10,8 +10,10 @@
     "strict": true,
     "skipLibCheck": true,
     "composite": true,
-    "tsBuildInfoFile": ".build/tsconfig.client.tsbuildinfo"
+    "rootDir": "../..",
+    "tsBuildInfoFile": "../../.build/tsconfig.client.tsbuildinfo",
+    "types": ["vite/client"]
   },
-  "include": ["src/client/**/*.ts", "tests/client/**/*.ts"],
-  "exclude": ["src/client/cloudflare.config.ts"]
+  "include": ["**/*.ts", "../../tests/client/**/*.ts"],
+  "exclude": ["cloudflare.config.ts"]
 }

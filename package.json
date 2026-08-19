@@ -20,18 +20,18 @@
     "postdeploy": "cf-access-policy apply -c access.config.ts --env-file .env --yes"
   },
   "dependencies": {
-    "hono": "^4.13.2",
-    "npm-run-all2": "^9.0.3"
+    "hono": "^4.13.2"
   },
   "devDependencies": {
     "@adrianhall/cloudflare-toolkit": "^2.5.1",
     "@cloudflare/vite-plugin": "^1.52.1",
     "@cloudflare/vitest-pool-workers": "^0.22.0",
     "@cloudflare/workers-types": "^5.20260817.1",
-    "@types/node": "^22.20.1",
+    "@types/node": "^26.2.0",
     "cf": "^0.6.0",
     "jsdom": "^30.0.1",
-    "typescript": "^5.9.3",
+    "npm-run-all2": "^9.0.3",
+    "typescript": "^6.0.3",
     "vite": "^8.0.16",
     "vitest": "^4.0.18"
   },

@@ -1,5 +1,5 @@
 import { bindings, defineWorker } from '@cloudflare/vite-plugin/experimental-config';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, URL } from 'node:url';
 
 const hostname = process.env.APP_HOSTNAME?.trim();
 

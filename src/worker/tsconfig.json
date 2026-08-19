@@ -10,17 +10,18 @@
     "strict": true,
     "skipLibCheck": true,
     "composite": true,
-    "tsBuildInfoFile": ".build/tsconfig.worker.tsbuildinfo",
+    "rootDir": "../..",
+    "tsBuildInfoFile": "../../.build/tsconfig.worker.tsbuildinfo",
     "types": [
       "node",
       "@cloudflare/workers-types/experimental",
-      "./worker-configuration.d.ts"
+      "../../worker-configuration.d.ts"
     ]
   },
   "include": [
-    "cloudflare.config.ts",
-    "src/worker/**/*.ts",
-    "tests/worker/**/*.ts",
-    "worker-configuration.d.ts"
+    "../../cloudflare.config.ts",
+    "**/*.ts",
+    "../../tests/worker/**/*.ts",
+    "../../worker-configuration.d.ts"
   ]
 }

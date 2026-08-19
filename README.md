@@ -18,10 +18,10 @@ tests/
 ```
 
 `cloudflare.config.ts` remains at the repository root because it describes the
-deployment as a whole. `tsconfig.client.json` and `tsconfig.worker.json` keep
-browser and Worker globals from leaking across the boundary. Vitest runs both
-test projects through the root `npm test` command; the Worker project runs in
-Miniflare with a local `LINKS` KV binding.
+deployment as a whole. The `tsconfig.json` files under `src/client/` and
+`src/worker/` keep browser and Worker globals from leaking across the boundary.
+Vitest runs both test projects through the root `npm test` command; the Worker
+project runs in Miniflare with a local `LINKS` KV binding.
 
 When the client needs Vue or React, replace only `src/client/` and add its Vite
 plugin. The Worker, deployment configuration, and Worker tests remain intact.
