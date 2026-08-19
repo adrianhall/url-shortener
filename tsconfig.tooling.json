@@ -10,14 +10,17 @@
     "strict": true,
     "skipLibCheck": true,
     "composite": true,
-    "rootDir": "../..",
-    "tsBuildInfoFile": "../../.build/tsconfig.worker.tsbuildinfo",
-    "types": ["node", "@cloudflare/workers-types/experimental", "../../worker-configuration.d.ts"]
+    "rootDir": ".",
+    "tsBuildInfoFile": ".build/tsconfig.tooling.tsbuildinfo",
+    "types": ["node", "vite/client"]
   },
   "include": [
-    "../../cloudflare.config.ts",
-    "**/*.ts",
-    "../../tests/worker/**/*.ts",
-    "../../worker-configuration.d.ts"
+    "access.config.ts",
+    "cloudflare.config.ts",
+    "oxfmt.config.ts",
+    "oxlint.config.ts",
+    "vite.config.ts",
+    "vitest.config.ts",
+    "src/client/cloudflare.config.ts"
   ]
 }

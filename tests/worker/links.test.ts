@@ -1,12 +1,13 @@
 import { env } from 'cloudflare:workers';
 import { beforeEach, describe, expect, it } from 'vitest';
+
 import app from '../../src/worker/index';
 import { resolveLinkRedirect } from '../../src/worker/routes/links';
 
 describe('resolveLinkRedirect', () => {
   it('redirects a known eight-character base62 link ID', async () => {
     const response = await resolveLinkRedirect(
-      { get: async () => 'https://example.com/articles/edge-routing' },
+      { get: () => Promise.resolve('https://example.com/articles/edge-routing') },
       '8Gk2pZqM',
     );
 
@@ -18,9 +19,9 @@ describe('resolveLinkRedirect', () => {
     let queried = false;
     const response = await resolveLinkRedirect(
       {
-        get: async () => {
+        get: () => {
           queried = true;
-          return null;
+          return Promise.resolve(null);
         },
       },
       'invalid-id',

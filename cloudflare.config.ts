@@ -1,11 +1,11 @@
 import { bindings, defineWorker } from '@cloudflare/vite-plugin/experimental-config';
-import { fileURLToPath, URL } from 'node:url';
+import { URL, fileURLToPath } from 'node:url';
 
 const hostname = process.env.APP_HOSTNAME?.trim();
 
 export default defineWorker({
   name: 'url-shortener',
-  entrypoint: fileURLToPath(new URL('./src/worker/index.ts', import.meta.url)),
+  entrypoint: fileURLToPath(new URL('src/worker/index.ts', import.meta.url)),
   compatibilityDate: '2026-08-18',
   compatibilityFlags: ['nodejs_compat'],
   env: {
@@ -19,7 +19,7 @@ export default defineWorker({
     enabled: true,
     headSamplingRate: 1,
   },
-  domains: hostname ? [hostname] : [],
+  domains: hostname !== undefined && hostname !== '' ? [hostname] : [],
   workersDev: false,
   previewUrls: false,
 });

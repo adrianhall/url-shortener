@@ -6,18 +6,24 @@ export function initializeLandingPage(document: Document): void {
   const status = document.querySelector<HTMLElement>('#form-status');
   const year = document.querySelector<HTMLElement>('#current-year');
 
-  if (year) year.textContent = String(new Date().getFullYear());
+  if (year) {
+    year.textContent = String(new Date().getFullYear());
+  }
 
   form?.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    if (!input?.value.trim()) {
-      if (status) status.textContent = 'Enter a URL when the admin API is available.';
+    if ((input?.value.trim() ?? '') === '') {
+      if (status) {
+        status.textContent = 'Enter a URL when the admin API is available.';
+      }
       input?.focus();
       return;
     }
 
-    if (status) status.textContent = 'Link creation will be available with the admin API.';
+    if (status) {
+      status.textContent = 'Link creation will be available with the admin API.';
+    }
   });
 }
 

@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+
 import { initializeLandingPage } from '../../src/client/main';
 
 describe('initializeLandingPage', () => {
@@ -24,12 +25,16 @@ describe('initializeLandingPage', () => {
   it('shows the current year and future API status for a URL', () => {
     initializeLandingPage(document);
     const input = document.querySelector<HTMLInputElement>('#destination-url');
-    if (!input) throw new Error('Expected destination URL input');
+    if (!input) {
+      throw new Error('Expected destination URL input');
+    }
     input.value = 'https://example.com';
 
     document.querySelector<HTMLFormElement>('#shorten-form')?.requestSubmit();
 
-    expect(document.querySelector('#current-year')?.textContent).toBe(String(new Date().getFullYear()));
+    expect(document.querySelector('#current-year')?.textContent).toBe(
+      String(new Date().getFullYear()),
+    );
     expect(document.querySelector('#form-status')?.textContent).toBe(
       'Link creation will be available with the admin API.',
     );

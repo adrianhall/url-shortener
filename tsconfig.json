@@ -2,6 +2,7 @@
   "files": [],
   "references": [
     { "path": "./src/client/tsconfig.json" },
-    { "path": "./src/worker/tsconfig.json" }
+    { "path": "./src/worker/tsconfig.json" },
+    { "path": "./tsconfig.tooling.json" }
   ]
 }

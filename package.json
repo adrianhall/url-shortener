@@ -3,21 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": {
-    "node": ">=24",
-    "npm": ">=11"
-  },
   "scripts": {
-    "dev": "cf dev",
     "build": "cf build",
     "check": "run-s check:*",
+    "check:format": "oxfmt --check",
+    "check:lint": "oxlint .",
     "check:types": "tsc --build",
+    "deploy": "cf deploy",
+    "dev": "cf dev",
+    "fix": "run-s fix:lint fix:format",
+    "fix:format": "oxfmt",
+    "fix:lint": "oxlint --fix .",
+    "postdeploy": "cf-access-policy apply -c access.config.ts --env-file .env --yes",
     "start": "npm run dev",
     "test": "vitest run --config vitest.config.ts",
     "test:client": "vitest run --project client --config vitest.config.ts",
-    "test:worker": "vitest run --project worker --config vitest.config.ts",
-    "deploy": "cf deploy",
-    "postdeploy": "cf-access-policy apply -c access.config.ts --env-file .env --yes"
+    "test:worker": "vitest run --project worker --config vitest.config.ts"
   },
   "dependencies": {
     "hono": "^4.13.2"
@@ -31,9 +32,16 @@
     "cf": "^0.6.0",
     "jsdom": "^30.0.1",
     "npm-run-all2": "^9.0.3",
-    "typescript": "^6.0.3",
+    "oxfmt": "0.64.0",
+    "oxlint": "1.79.0",
+    "oxlint-tsgolint": "7.0.2001",
+    "typescript": "7.0.2",
     "vite": "^8.0.16",
     "vitest": "^4.0.18"
+  },
+  "engines": {
+    "node": ">=24",
+    "npm": ">=11"
   },
   "allowScripts": {
     "esbuild@0.28.1": true,

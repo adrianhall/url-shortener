@@ -36,7 +36,7 @@ plugin. The Worker, deployment configuration, and Worker tests remain intact.
 
 ## Local development
 
-Requirements: Node.js 22+ and npm 10.
+Requirements: Node.js 24+ and npm 11+.
 
 ```sh
 npm install
@@ -56,6 +56,9 @@ running development session.
 
 ## Validation
 
+Oxlint performs strict type-aware linting, Oxfmt checks formatting, and TypeScript
+checks the client, Worker, and tooling projects:
+
 ```sh
 npm run check
 npm test
@@ -63,6 +66,19 @@ npm run test:client
 npm run test:worker
 npm run build
 ```
+
+Apply safe lint fixes followed by formatting with:
+
+```sh
+npm run fix
+```
+
+The repository recommends the official Oxc VS Code extension. Workspace settings
+enable type-aware diagnostics, safe Oxc fixes, and Oxfmt formatting on save. Other
+editors should use the repository-local `oxlint` and `oxfmt` installations and the
+checked-in TypeScript configuration files.
+
+Lint suppressions must name the specific rule and include a short justification.
 
 ## Deployment
 
