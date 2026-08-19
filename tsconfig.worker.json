@@ -10,6 +10,7 @@
     "strict": true,
     "skipLibCheck": true,
     "composite": true,
+    "tsBuildInfoFile": ".build/tsconfig.worker.tsbuildinfo",
     "types": [
       "node",
       "@cloudflare/workers-types/experimental",

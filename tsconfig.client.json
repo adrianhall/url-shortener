@@ -9,7 +9,8 @@
     "isolatedModules": true,
     "strict": true,
     "skipLibCheck": true,
-    "composite": true
+    "composite": true,
+    "tsBuildInfoFile": ".build/tsconfig.client.tsbuildinfo"
   },
   "include": ["src/client/**/*.ts", "tests/client/**/*.ts"],
   "exclude": ["src/client/cloudflare.config.ts"]
