@@ -1,0 +1,40 @@
+{
+  "name": "url-shortener",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "cf dev",
+    "build": "cf build",
+    "check": "run-s check:*",
+    "check:types": "tsc --build",
+    "start": "npm run dev",
+    "test": "vitest run --config vitest.config.ts",
+    "test:client": "vitest run --project client --config vitest.config.ts",
+    "test:worker": "vitest run --project worker --config vitest.config.ts",
+    "deploy": "node ./scripts/deploy.mjs"
+  },
+  "dependencies": {
+    "hono": "^4.13.2",
+    "npm-run-all2": "^9.0.3"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.52.1",
+    "@cloudflare/vitest-pool-workers": "^0.22.0",
+    "@cloudflare/workers-types": "^5.20260817.1",
+    "@types/node": "^22.20.1",
+    "cf": "^0.6.0",
+    "jsdom": "^30.0.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.16",
+    "vitest": "^4.0.18"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "fsevents@2.3.3": true,
+    "workerd@1.20260815.1": true
+  }
+}

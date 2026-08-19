@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es2024",
+    "lib": ["es2024"],
+    "module": "esnext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "composite": true,
+    "types": [
+      "node",
+      "@cloudflare/workers-types/experimental",
+      "./worker-configuration.d.ts"
+    ]
+  },
+  "include": [
+    "cloudflare.config.ts",
+    "src/worker/**/*.ts",
+    "tests/worker/**/*.ts",
+    "worker-configuration.d.ts"
+  ]
+}
