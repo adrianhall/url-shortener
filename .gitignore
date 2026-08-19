@@ -4,3 +4,7 @@ dist/
 .cloudflare/
 src/client/.cloudflare/
 .dev.vars*
+*.tsbuildinfo
+.env
+.env.*
+!.env.example

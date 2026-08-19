@@ -72,18 +72,19 @@ script loads it without replacing values already exported by your shell or CI.
 disabled so it is the only public hostname.
 
 `LINKS` deliberately omits a namespace ID. `cf deploy` automatically creates
-and binds the KV namespace. The deploy script then reconciles a self-hosted
-Access application for the custom hostname and a global `Bypass everyone`
-policy.
+and binds the KV namespace.
 
 ```sh
 npm run deploy
 ```
 
-`ACCESS_ALLOWED_EMAIL_DOMAIN` is reserved for Phase 2. At that point, separate
-path-scoped Access applications for `/admin`, `/admin/*`, and `/api/*` will use
-an Allow policy for that domain, while the hostname-wide bypass keeps public
-short links available.
+`access.config.ts` declares reusable Access policies and self-hosted
+applications through `@adrianhall/cloudflare-toolkit`. `cf-access-policy`
+defaults to that file; pass `--config <file>` to use a different declaration.
+`apply` prints its plan and asks for confirmation; `--yes` is suitable for CI.
+The current declaration creates a hostname-wide `Bypass everyone` policy.
+Future path-scoped administration applications can reuse an Allow policy for
+`ACCESS_ALLOWED_EMAIL_DOMAIN`.
 
 The public client is framework-free for now. An admin interface can be added
 later as Vue or React in `src/client`, with its routes handled by the reserved

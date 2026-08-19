@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=24",
+    "npm": ">=11"
   },
   "scripts": {
     "dev": "cf dev",
@@ -15,13 +16,15 @@
     "test": "vitest run --config vitest.config.ts",
     "test:client": "vitest run --project client --config vitest.config.ts",
     "test:worker": "vitest run --project worker --config vitest.config.ts",
-    "deploy": "node ./scripts/deploy.mjs"
+    "deploy": "cf deploy",
+    "postdeploy": "cf-access-policy apply -c access.config.ts --env-file .env --yes"
   },
   "dependencies": {
     "hono": "^4.13.2",
     "npm-run-all2": "^9.0.3"
   },
   "devDependencies": {
+    "@adrianhall/cloudflare-toolkit": "^2.5.1",
     "@cloudflare/vite-plugin": "^1.52.1",
     "@cloudflare/vitest-pool-workers": "^0.22.0",
     "@cloudflare/workers-types": "^5.20260817.1",
