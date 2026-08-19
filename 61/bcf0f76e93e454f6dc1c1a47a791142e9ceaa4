@@ -1,0 +1,25 @@
+package-lock.json
+  s_639560a1ddbcbb::t_0f0015c7e8f8bb 1-3511
+package.json
+  s_639560a1ddbcbb::t_bce7b3a228ff28 1-40
+tsconfig.client.tsbuildinfo
+  s_639560a1ddbcbb::t_4e2dca6e677cd9 1
+tsconfig.worker.tsbuildinfo
+  s_639560a1ddbcbb::t_fc39070da5dd0b 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "61bcf0f76e93e454f6dc1c1a47a791142e9ceaa4",
+  "prompts": {},
+  "sessions": {
+    "s_639560a1ddbcbb": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe63ca469ffesrqb6vVSfQ25n3",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "ahall <ahall@cloudflare.com>"
+    }
+  }
+}
