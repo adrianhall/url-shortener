@@ -1,0 +1,39 @@
+oxfmt.config.ts
+  s_6306d045aae4d6::t_9fcd76b14706d6 1-40
+oxlint.config.ts
+  s_6306d045aae4d6::t_6e2b23359c3156 1-96
+package-lock.json
+  s_6306d045aae4d6::t_debe878a1a3105 22-25,1463-2240,2247-2386,2389-2395,2398-2403,2406-2412,2414-2421,2423,2425-2460,2468,2474,2476-2477,2484-2620,2625-2659,2662-2665,2667,2670,2673,2676,2679-2682,2684,2687,2690,2693,2696-2699,2701,2704,2710,2713-2716,2718,2721,2727,2730-2733,2735,2738,2744,2747-2750,2752,2755,2761,2764-2767,2772,2778,2781-2784,2789,2795,2798-2801,2803,2806,2809,2812,2815-2818,2820,2823,2826,2829,2832-2835,2840,2843,2846,2849-2852,2857,2860,2863,2866-2872,2874-2878,2880,2883-2889,2891-2897,2900-2906,2908-2914,3888-4006,4365-4374,4440-4442,4446,4449-4471
+package.json
+  s_6306d045aae4d6::t_30adb825cba7ee 9-10,12-17,21,35-38,42-45
+src/client/index.html
+  s_6306d045aae4d6::t_f9262f7133b781 6,25-26,46-52,69-71,81-83,91-94
+src/client/style.css
+  s_6306d045aae4d6::t_6210b9d7329be2 10-318,320-371
+src/worker/index.ts
+  s_6306d045aae4d6::t_481551921c41ba 2,6,12
+src/worker/tsconfig.json
+  s_6306d045aae4d6::t_c365979ba8aa3a 15
+tests/client/main.test.ts
+  s_6306d045aae4d6::t_bb5f5dc2e49e34 2,28-30,35-37
+tests/worker/links.test.ts
+  s_6306d045aae4d6::t_bababbff8b34b4 3,10,22,24
+vitest.config.ts
+  s_6306d045aae4d6::t_42bf2da9219539 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "b773a987edda67dc87c9cb034ea4f2abbda995d5",
+  "prompts": {},
+  "sessions": {
+    "s_6306d045aae4d6": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe545fa20ffedl56d9fcDNoGPc",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "ahall <ahall@cloudflare.com>"
+    }
+  }
+}
