@@ -1,0 +1,21 @@
+package-lock.json
+  s_5d54820ac8722b::t_5fddc176b491a6 15,27-63,1974-1986,1994-2003,2120-2132,2296-2305
+package.json
+  s_5d54820ac8722b::t_ca0b5769743355 7-8,19-20,27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "371be6fe3297b0580cf54a804dc010e0d7dbf391",
+  "prompts": {},
+  "sessions": {
+    "s_5d54820ac8722b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe6252ff5ffe61QGLUHWRh5d77",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "ahall <ahall@cloudflare.com>"
+    }
+  }
+}
