@@ -1,0 +1,25 @@
+.env.example
+  s_0f626e98eff6b0::t_bdd0cf3cefea13 10-12
+package-lock.json
+  s_0f626e98eff6b0::t_5373edea1ba314 11-14,873-882,1442,2483,2542,3183,3235,3297,3448,3752,3977,3984,4010,4073,4218,4279,4370,4415,4428-4441,4446
+tests/worker/routes/links.test.ts
+  s_0f626e98eff6b0::t_43f50a85fe6000 1-3,7,9-14,16-18,21-22,24-25,28-32,35-49,51
+tsconfig.tooling.json
+  s_0f626e98eff6b0::t_37bb11404d453e 24-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "e6409726777f94323a591c430a3c9aedc0fc021c",
+  "prompts": {},
+  "sessions": {
+    "s_0f626e98eff6b0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe171b7e8ffeginb6wTfMTjsVJ",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "ahall <ahall@cloudflare.com>"
+    }
+  }
+}
