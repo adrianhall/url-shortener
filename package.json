@@ -8,6 +8,7 @@
     "check": "run-s check:*",
     "check:format": "oxfmt --check",
     "check:lint": "oxlint .",
+    "check:policies": "cf-access-policy apply -c access.config.ts --env-file .env --dry-run",
     "check:types": "tsc --build",
     "deploy": "cf deploy",
     "dev": "cf dev",
@@ -21,10 +22,12 @@
     "test:worker": "vitest run --project worker --config vitest.config.ts"
   },
   "dependencies": {
-    "hono": "^4.13.2"
+    "@adrianhall/cloudflare-toolkit": "^2.5.1",
+    "@hono/valibot-validator": "^0.6.1",
+    "hono": "^4.13.2",
+    "valibot": "^1.4.2"
   },
   "devDependencies": {
-    "@adrianhall/cloudflare-toolkit": "^2.5.1",
     "@cloudflare/vite-plugin": "^1.52.1",
     "@cloudflare/vitest-pool-workers": "^0.22.0",
     "@cloudflare/workers-types": "^5.20260817.1",

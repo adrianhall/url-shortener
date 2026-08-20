@@ -1,20 +1,31 @@
-const linkIdPattern = /^[0-9A-Za-z]{8}$/u;
-const notFoundStatus = 404;
-const redirectStatus = 302;
+import { notFound } from '@adrianhall/cloudflare-toolkit';
+/**
+ * @file The Hono router for the '/l' endpoint
+ */
+import { Hono } from 'hono';
 
-interface LinkStore {
-  get: (key: string) => Promise<string | null>;
-}
+import type { AppBindings } from '../bindings';
 
-export async function resolveLinkRedirect(links: LinkStore, linkId: string): Promise<Response> {
-  if (!linkIdPattern.test(linkId)) {
-    return new Response('Link not found', { status: notFoundStatus });
+import { validateLinkIdentity } from '../lib/validators';
+
+/**
+ * The Hono router for the link redirector
+ */
+export const linkRedirector = new Hono<AppBindings>();
+
+const RedirectStatusCode = 302;
+
+/*
+ * HTTP Endpoint `GET /l/:linkId`
+ * 302 Temporary Redirect, when link is available within the KV store
+ * 404 Not Found, when the link is not available within the KV store
+ * 422 Unprocessable Content, when the link is not valid
+ */
+linkRedirector.get('/:linkId', validateLinkIdentity(), async (context) => {
+  const linkId = context.req.param('linkId');
+  const destination = await context.env.LINKS.get(linkId);
+  if (destination === null || destination === '') {
+    throw notFound();
   }
-
-  const destination = await links.get(linkId);
-  if (destination === null) {
-    return new Response('Link not found', { status: notFoundStatus });
-  }
-
-  return Response.redirect(destination, redirectStatus);
-}
+  return Response.redirect(destination, RedirectStatusCode);
+});

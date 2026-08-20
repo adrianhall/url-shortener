@@ -37,19 +37,19 @@ low-latency redirect cache that Phase 1 already built.
 
 ## Key decisions
 
-| Decision | Choice | Rationale |
-| --- | --- | --- |
-| Database | D1, binding name `DB` | `cloudflare.config.ts` already uses the `bindings.*()` helpers (`bindings.kv()` for `LINKS`); `bindings.d1({ name })` follows the same auto-provisioning pattern — no database ID is committed, `cf deploy`/`cf dev` create and bind it. |
-| Migrations | Hand-rolled, tracked in a `_migrations` D1 table | The `cf` CLI (this repo's deploy tool, not Wrangler) has no `d1 migrations` subcommand — only `cf d1 query`/`import`/`export`. A small `scripts/db/migrate.mjs` applies numbered `.sql` files in order and records each in `_migrations`, the same idea as Wrangler's own migrations table but implemented against `cf d1 query` (remote/local) and `D1Database#exec()` (tests). |
-| Link ID encoding | Base62-encode the D1 `links.id` autoincrement integer on read; never store the encoded ID | Keeps a single source of truth (the integer PK) and reuses the existing 8-character `linkIdPattern` contract in `src/worker/routes/links.ts`. A pure `encodeBase62`/`decodeBase62` pair is unit-tested in isolation. |
-| Authn/authz | `cloudflareAccess()` for **authentication** (proves the request carries a real, signed Access identity) + a single `requireAllowedDomain` middleware for **authorization** (the identity's email domain matches `ACCESS_ALLOWED_EMAIL_DOMAIN`) | These are two different concerns, each checked exactly once, in exactly one place. `access.config.ts` deliberately does **not** also encode an email-domain rule — the domain allowlist lives in one system (this Worker's own config/code), not two, so there is nothing to keep in sync and nothing for a handler or repository to "double check" afterward. |
-| Ownership model | `links.owner_email` column, always taken from the verified Access identity, never from client input | Prevents a client from ever creating/editing a link "as" someone else. |
-| Concurrency control | Optimistic concurrency via a `links.version` integer, `If-Match`-style version check on `PUT`/`DELETE` | The prompt explicitly calls out protecting against concurrent writers "even though they technically can't right now" — optimistic locking is cheap, testable, and future-proofs multi-tab/multi-device editing by the same user. |
-| Validation | `valibot` schemas in a dedicated `src/worker/schemas/` module | Small, tree-shakeable, already the requested library; schemas are unit-tested independently of HTTP wiring. |
-| Errors | `@adrianhall/cloudflare-toolkit/errors` generators + `problemDetailsErrorHandler` | Matches toolkit usage guidance; `409 Conflict` (not in the toolkit's v1 generator set) is constructed once via `problemDetails()` from `/problem-details` and reused. |
-| Logging | `cloudflareLogger()` + `c.get('LOGGER')` in every handler and repository call site that can fail | Consistent with toolkit guidance; structured logs make ownership-violation attempts and version conflicts observable. |
-| UI framework | Vue 3 + `<script setup>` (Composition API), **not React** | Matches the explicit constraint; this repo already has first-class Vue tooling/skills available, and Vue's SFC + reactivity model is a good fit for a small CRUD admin screen without extra state-management ceremony. |
-| Coverage | `@vitest/coverage-istanbul` | Cloudflare's own Vitest-pool-workers docs state V8 coverage is unsupported in the Workers runtime and Istanbul is required. |
+| Decision            | Choice                                                                                                                                                                                                                                         | Rationale                                                                                                                                                                                                                                                                                                                                                                        |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Database            | D1, binding name `DB`                                                                                                                                                                                                                          | `cloudflare.config.ts` already uses the `bindings.*()` helpers (`bindings.kv()` for `LINKS`); `bindings.d1({ name })` follows the same auto-provisioning pattern — no database ID is committed, `cf deploy`/`cf dev` create and bind it.                                                                                                                                         |
+| Migrations          | Hand-rolled, tracked in a `_migrations` D1 table                                                                                                                                                                                               | The `cf` CLI (this repo's deploy tool, not Wrangler) has no `d1 migrations` subcommand — only `cf d1 query`/`import`/`export`. A small `scripts/db/migrate.mjs` applies numbered `.sql` files in order and records each in `_migrations`, the same idea as Wrangler's own migrations table but implemented against `cf d1 query` (remote/local) and `D1Database#exec()` (tests). |
+| Link ID encoding    | Base62-encode the D1 `links.id` autoincrement integer on read; never store the encoded ID                                                                                                                                                      | Keeps a single source of truth (the integer PK) and reuses the existing 8-character `linkIdPattern` contract in `src/worker/routes/links.ts`. A pure `encodeBase62`/`decodeBase62` pair is unit-tested in isolation.                                                                                                                                                             |
+| Authn/authz         | `cloudflareAccess()` for **authentication** (proves the request carries a real, signed Access identity) + a single `requireAllowedDomain` middleware for **authorization** (the identity's email domain matches `ACCESS_ALLOWED_EMAIL_DOMAIN`) | These are two different concerns, each checked exactly once, in exactly one place. `access.config.ts` deliberately does **not** also encode an email-domain rule — the domain allowlist lives in one system (this Worker's own config/code), not two, so there is nothing to keep in sync and nothing for a handler or repository to "double check" afterward.                   |
+| Ownership model     | `links.owner_email` column, always taken from the verified Access identity, never from client input                                                                                                                                            | Prevents a client from ever creating/editing a link "as" someone else.                                                                                                                                                                                                                                                                                                           |
+| Concurrency control | Optimistic concurrency via a `links.version` integer, `If-Match`-style version check on `PUT`/`DELETE`                                                                                                                                         | The prompt explicitly calls out protecting against concurrent writers "even though they technically can't right now" — optimistic locking is cheap, testable, and future-proofs multi-tab/multi-device editing by the same user.                                                                                                                                                 |
+| Validation          | `valibot` schemas in a dedicated `src/worker/schemas/` module                                                                                                                                                                                  | Small, tree-shakeable, already the requested library; schemas are unit-tested independently of HTTP wiring.                                                                                                                                                                                                                                                                      |
+| Errors              | `@adrianhall/cloudflare-toolkit/errors` generators + `problemDetailsErrorHandler`                                                                                                                                                              | Matches toolkit usage guidance; `409 Conflict` (not in the toolkit's v1 generator set) is constructed once via `problemDetails()` from `/problem-details` and reused.                                                                                                                                                                                                            |
+| Logging             | `cloudflareLogger()` + `c.get('LOGGER')` in every handler and repository call site that can fail                                                                                                                                               | Consistent with toolkit guidance; structured logs make ownership-violation attempts and version conflicts observable.                                                                                                                                                                                                                                                            |
+| UI framework        | Vue 3 + `<script setup>` (Composition API), **not React**                                                                                                                                                                                      | Matches the explicit constraint; this repo already has first-class Vue tooling/skills available, and Vue's SFC + reactivity model is a good fit for a small CRUD admin screen without extra state-management ceremony.                                                                                                                                                           |
+| Coverage            | `@vitest/coverage-istanbul`                                                                                                                                                                                                                    | Cloudflare's own Vitest-pool-workers docs state V8 coverage is unsupported in the Workers runtime and Istanbul is required.                                                                                                                                                                                                                                                      |
 
 ## Repository layout after all phases
 
@@ -119,7 +119,7 @@ depends on.
 3. `access.config.ts`: add a **second** self-hosted Access application scoped
    to the admin surface only:
    - A new `AccessPolicy` (e.g. `Allow authenticated staff`) with `decision:
-     'allow'` and an `include` rule that only requires a valid identity from
+'allow'` and an `include` rule that only requires a valid identity from
      the configured identity provider (e.g. `{ everyone: {} }`, same shape
      already used by "Briefly bypass everyone" — the difference is
      `decision: 'allow'` instead of `'bypass'`, so Access still requires a
@@ -225,8 +225,8 @@ A small Node script (ESM, no new heavy dependency) that:
    bookkeeping table exists.
 3. Determines which migration filenames are not yet recorded.
 4. Applies each pending file's full contents via `cf d1 query <database-id>
-   --sql "<contents>"` (remote) or the same command with `--local
-   --local-endpoint <url>` (local dev against the Miniflare instance created
+--sql "<contents>"` (remote) or the same command with `--local
+--local-endpoint <url>` (local dev against the Miniflare instance created
    by `cf dev`), then records it in `_migrations`.
 5. Supports `--database-id`, `--local`, `--local-endpoint`, and `--dry-run`
    flags; resolves the remote database ID via `cf d1 list` filtered by the
@@ -297,14 +297,14 @@ unaffected.
   `notFound()` at the route layer, keeping the pure function free of
   HTTP/problem-details concerns.
 - Property-based/table-driven unit tests: round-trip `encode(decode(x)) ===
-  x` for a range of small and large integers, reject out-of-alphabet
+x` for a range of small and large integers, reject out-of-alphabet
   characters, reject wrong-length strings, confirm padding behavior for
   small IDs (e.g. `id = 1`).
 
 ### `src/worker/schemas/links.ts` (valibot)
 
 - `createLinkSchema`: `{ destinationUrl: string }` — `v.pipe(v.string(),
-  v.url(), v.maxLength(2048))` (or equivalent), rejecting `javascript:` and
+v.url(), v.maxLength(2048))` (or equivalent), rejecting `javascript:` and
   other non-`http(s)` schemes explicitly (valibot's `v.url()` alone does not
   restrict scheme — add a custom `v.check()` for `http:`/`https:` only).
 - `updateLinkSchema`: `{ destinationUrl: string, version: number }` — same
@@ -353,8 +353,8 @@ export function createD1LinksRepository(db: D1Database): LinksRepository { ... }
 Concurrency-safety details:
 
 - `updateForOwner`/`removeForOwner` run a single `UPDATE ... WHERE id = ? AND
-  owner_email = ? AND version = ?` / `DELETE ... WHERE id = ? AND owner_email
-  = ? AND version = ?` statement and inspect the D1 `meta.changes` (or
+owner_email = ? AND version = ?` / `DELETE ... WHERE id = ? AND owner_email
+= ? AND version = ?` statement and inspect the D1 `meta.changes` (or
   `rowsWritten`, confirm the exact field name against
   `@cloudflare/workers-types`) result.
   - `0` rows changed + a row exists for that `id`/`owner_email` with a
@@ -450,12 +450,12 @@ a handler that only runs after `vValidator('json', createLinkSchema)` reads
 URL scheme, no re-checking `version`'s type, no defensive `??` fallback for
 a field the schema already guarantees is present.
 
-| Method | Path | Behavior |
-| --- | --- | --- |
-| `GET` | `/api/admin/links` | `listByOwner(identity.email)`, mapped to a JSON array of `{ linkId, destinationUrl, version, createdAt, updatedAt }` (never expose the raw integer `id`). |
-| `POST` | `/api/admin/links` | `vValidator('json', createLinkSchema)` middleware, then `create(...)` using `c.req.valid('json')` directly; on success, `LINKS.put(linkId, destinationUrl)` (KV write), return `201` with the created record. |
-| `GET` | `/api/admin/links/:linkId` | `decodeBase62`; `404` on decode failure; `getByIdForOwner`; `404` if absent. |
-| `PUT` | `/api/admin/links/:linkId` | `vValidator('json', updateLinkSchema)` middleware, then `updateForOwner(...)` using `c.req.valid('json')` directly; on success, `LINKS.put(linkId, destinationUrl)`; return the updated record. |
+| Method   | Path                       | Behavior                                                                                                                                                                                                                                                                                                                  |
+| -------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET`    | `/api/admin/links`         | `listByOwner(identity.email)`, mapped to a JSON array of `{ linkId, destinationUrl, version, createdAt, updatedAt }` (never expose the raw integer `id`).                                                                                                                                                                 |
+| `POST`   | `/api/admin/links`         | `vValidator('json', createLinkSchema)` middleware, then `create(...)` using `c.req.valid('json')` directly; on success, `LINKS.put(linkId, destinationUrl)` (KV write), return `201` with the created record.                                                                                                             |
+| `GET`    | `/api/admin/links/:linkId` | `decodeBase62`; `404` on decode failure; `getByIdForOwner`; `404` if absent.                                                                                                                                                                                                                                              |
+| `PUT`    | `/api/admin/links/:linkId` | `vValidator('json', updateLinkSchema)` middleware, then `updateForOwner(...)` using `c.req.valid('json')` directly; on success, `LINKS.put(linkId, destinationUrl)`; return the updated record.                                                                                                                           |
 | `DELETE` | `/api/admin/links/:linkId` | `vValidator('query', deleteLinkQuerySchema)` middleware validates the required `version` query parameter (rejecting a missing/non-integer value with `400` before the handler runs); handler calls `removeForOwner(...)` using `c.req.valid('query').version` directly; on success, `LINKS.delete(linkId)`; return `204`. |
 
 Ordering and dual-write notes (documented inline in code comments, since this
@@ -616,7 +616,7 @@ final cross-cutting review.
    }
    ```
 3. Add an npm script: `"test:coverage": "vitest run --config
-   vitest.config.ts --coverage"`.
+vitest.config.ts --coverage"`.
 4. Add `npm run test:coverage` to `.github/workflows/ci.yml` (either
    replacing or running alongside the existing `npm test` step — replacing
    is simpler and avoids running the suite twice).

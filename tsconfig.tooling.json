@@ -21,6 +21,7 @@
     "oxlint.config.ts",
     "vite.config.ts",
     "vitest.config.ts",
-    "src/client/cloudflare.config.ts"
+    "src/client/cloudflare.config.ts",
+    "src/worker/path-policies.ts"
   ]
 }

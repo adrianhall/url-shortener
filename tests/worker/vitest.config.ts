@@ -10,6 +10,10 @@ export default defineProject({
         compatibilityDate: '2026-08-18',
         compatibilityFlags: ['nodejs_compat'],
         kvNamespaces: ['LINKS'],
+        d1Databases: ['DB'],
+        bindings: {
+          ENVIRONMENT: 'test',
+        },
       },
     }),
   ],

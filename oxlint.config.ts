@@ -43,6 +43,9 @@ export default defineConfig({
       env: {
         worker: true,
       },
+      globals: {
+        process: 'readonly',
+      },
     },
     {
       files: ['tests/client/**/*.{js,ts,jsx,tsx}'],
@@ -58,6 +61,9 @@ export default defineConfig({
       env: {
         worker: true,
         vitest: true,
+      },
+      globals: {
+        process: 'readonly',
       },
     },
     {
@@ -81,7 +87,10 @@ export default defineConfig({
     'eslint/one-var': 'off',
     'eslint/sort-imports': 'off',
     'eslint/sort-keys': 'off',
+    // Conflicts with eslint/no-duplicate-imports: that rule requires one `import` statement per module, while this rule wants inline `type X` specifiers split into a second, separate `import type` statement from the same module. Keep named imports (including `type X` specifiers) in a single statement per AGENTS.md's readability guidance, and leave no-duplicate-imports enabled to enforce it.
+    'import/consistent-type-specifier-style': 'off',
     'import/exports-last': 'off',
+    'import/group-exports': 'off',
     'import/no-default-export': 'off',
     'import/no-named-export': 'off',
     'import/no-relative-parent-imports': 'off',

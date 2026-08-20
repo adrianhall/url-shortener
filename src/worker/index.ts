@@ -1,14 +1,44 @@
+import {
+  cloudflareLogger,
+  cloudflareAccess,
+  problemDetailsErrorHandler,
+  notFoundHandler,
+} from '@adrianhall/cloudflare-toolkit/hono';
+/**
+ * @file entry point for the Cloudflare Worker
+ */
 import { Hono } from 'hono';
 
-import { resolveLinkRedirect } from './routes/links';
+import type { AppBindings } from './bindings';
 
-const app = new Hono<{ Bindings: Env }>();
-const notFoundStatus = 404;
+import { isDevelopment } from './lib/utils';
+import { accessPolicies } from './path-policies';
+import { apiRouter, linkRedirector } from './routes';
 
-app.get('/l/:linkId', (context) =>
-  resolveLinkRedirect(context.env.LINKS, context.req.param('linkId')),
+const app = new Hono<AppBindings>();
+
+// Adds the c.var.LOGGER as a universal logger
+app.use(cloudflareLogger());
+
+// Augments the context variables with the identity of the user
+app.use(
+  cloudflareAccess({
+    policies: accessPolicies,
+    defaultAction: 'bypass',
+    enableDevTokens: isDevelopment(),
+  }),
 );
 
-app.notFound((context) => context.text('Not found', notFoundStatus));
+// Wires in the '/api' routes
+app.route('/api', apiRouter);
+
+// Wires in the '/l' routes
+app.route('/l', linkRedirector);
+
+// Turns thrown errors into RFC-9457 problem details HTTP responses
+app.onError(problemDetailsErrorHandler({ includeStack: isDevelopment() }));
+
+// Returns 404 errors as RFC-9457 problem details HTTP responses
+app.notFound(notFoundHandler());
 
 export default app;

@@ -60,7 +60,7 @@ violated by over-eager "defense in depth."
   sync, not "extra safety."
 - **DON'T** invent a second, independent enforcement layer for the same
   business rule in a different system (for example: encoding the same
-  email-domain allowlist in both a Cloudflare Access policy *and* Worker
+  email-domain allowlist in both a Cloudflare Access policy _and_ Worker
   code) unless the two layers genuinely check different things. Prefer one
   authoritative place per rule, and make that place a `.ts` file with a unit
   test, not infrastructure configuration the app cannot assert against.
@@ -68,7 +68,7 @@ violated by over-eager "defense in depth."
   things.** Cloudflare Access proving "this is a real, signed-in identity"
   and a Worker middleware proving "this identity's domain is on the
   allowlist" are two different concerns and both belong. A SQL `WHERE
-  owner_email = ?` in a repository method is not "re-checking" an
+owner_email = ?` in a repository method is not "re-checking" an
   authorization decision already made in middleware — it is the mechanism
   that makes per-row ownership scoping possible at all, and middleware
   structurally cannot express it. The test for whether a check belongs is
